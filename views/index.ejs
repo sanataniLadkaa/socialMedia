@@ -1,1 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog App</title>
+    <style>
+        /* Style for the profile image */
+        #profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+        }
+        .header h1 {
+            margin-left: 10px;
+        }
+        
+        
+        /* General body styling */
+        body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7f6;
+        color: #333;
+        }
+        
+        /* Main container */
+        .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        }
+        
+        /* Title and headings */
+        h1 {
+        font-size: 2.5em;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+        }
+        
+        h2 {
+        font-size: 1.8em;
+        color: #333;
+        margin-bottom: 15px;
+        }
+        
+        /* Form elements */
+        form {
+        margin: 20px 0;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        input, textarea, button {
+        margin: 10px 0;
+        padding: 12px;
+        font-size: 16px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        }
+        
+        /* Input and textarea focus effect */
+        input:focus, textarea:focus {
+        outline: none;
+        border-color: #007BFF;
+        }
+        
+        /* Button styles */
+        button {
+        background-color: #007BFF;
+        color: white;
+        cursor: pointer;
+        }
+        
+        button:hover {
+        background-color: #0056b3;
+        }
+        
+        /* Post section */
+        .post {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 15px 0;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post h3 {
+        margin-top: 0;
+        font-size: 1.6em;
+        color: #333;
+        }
+        
+        .post p {
+        line-height: 1.6;
+        }
+        
+        .post img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border-radius: 5px;
+        }
+        
+        /* Like and Comment buttons */
+        .post form {
+        margin: 10px 0;
+        }
+        
+        .post .comments {
+        margin-top: 15px;
+        padding-left: 20px;
+        }
+        
+        .post .comments p {
+        font-style: italic;
+        font-size: 0.9em;
+        color: #555;
+        }
+        
+        .post .comments strong {
+        color: #333;
+        }
+        
+        /* Create post section */
+        #create-post-section {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Register and login form styling */
+        form input[type="text"], form input[type="password"] {
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        }
+        
+        form input[type="text"]:focus, form input[type="password"]:focus {
+        border-color: #007BFF;
+        }
+        
+        form button[type="submit"] {
+        background-color: #007BFF;
+        border: none;
+        color: white;
+        cursor: pointer;
+        }
+        
+        form button[type="submit"]:hover {
+        background-color: #0056b3;
+        }
+        
+        button.logout {
+        background-color: #dc3545;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 10px 20px;
+        margin-top: 20px;
+        }
+        
+        button.logout:hover {
+        background-color: #c82333;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+        .container {
+        padding: 10px;
+        }
+        
+        form, .post {
+        margin: 10px 0;
+        }
+        
+        .post h3 {
+        font-size: 1.4em;
+        }
+        
+        .post p {
+        font-size: 1em;
+        }
+        
+        input, textarea, button {
+        font-size: 14px;
+        }
+        }
+        .comment-replies , .comment{
+            color: gray;
+            font-size: medium;
+            background-color: #dcf3fe;
+        }
+        .reply-btn ,.comment{
+            background-color: white;
+            
+        }
+        
+        </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Blog App</h1>
 
+        <!-- User Authentication -->
+        <% if (!user) { %>
+            <h2>Register</h2>
+            <form action="/register" method="POST" enctype="multipart/form-data">
+                <input type="text" name="username" placeholder="Username" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <input type="file" name="profileImage" accept="image/*" />
+                <button type="submit">Register</button>
+            </form>
+
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <input type="text" name="username" placeholder="Username" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <button type="submit">Login</button>
+            </form>
+        <% } else { %>
+            <div>
+                <% if (user.profileImage) { %>
+                    <img src="<%= user.profileImage %>" alt="Profile Image" style="width: 50px; height: 50px; border-radius: 50%; vertical-align: middle;">
+                <% } %>
+                <span>Welcome, <%= user.username %>!</span>
+                <button onclick="location.href='/logout'">Logout</button>
+            </div>
+
+            <!-- Create Post -->
+            <h2>Create Post</h2>
+            <form action="/posts" method="POST" enctype="multipart/form-data">
+                <input type="text" name="title" placeholder="Post Title" required />
+                <textarea name="content" placeholder="Post Content" required></textarea>
+                <input type="file" name="image" accept="image/*" />
+                <button type="submit">Create Post</button>
+            </form>
+
+            <!-- Display Posts -->
+            <h2>Posts</h2>
+            <% posts.forEach(post => { %>
+                <div class="post">
+                    <h3><%= post.title %></h3>
+                    <p><%= post.content %></p>
+                    <% if (post.image) { %>
+                        <img src="<%= post.image %>" alt="Post Image" style="max-width: 100%; height: auto;">
+                    <% } %>
+                    <p><strong>Author:</strong> <%= post.author %></p>
+                    <p><strong>Likes:</strong> <%= post.likes %></p>
+
+                    <!-- Like Button -->
+                    <form action="/posts/<%= post._id %>/like" method="POST">
+                        <button type="submit">Like</button>
+                    </form>
+
+                    <!-- Comment Section -->
+                    <form action="/posts/<%= post._id %>/comment" method="POST">
+                        <input type="text" name="text" placeholder="Add a comment" required />
+                        <button type="submit">Comment</button>
+                    </form>
+
+                    <!-- Display Comments -->
+                    <div class="comments">
+                        <% post.comments.forEach(comment => { %>
+                            <div class="comment">
+                                <p><strong><%= comment.author %>:</strong> <%= comment.text %></p>
+
+                                <!-- Reply to Comment -->
+                                <form action="/posts/<%= post._id %>/comments/<%= comment._id %>/reply" method="POST">
+                                    <input type="text" name="text" placeholder="Write a reply..." required />
+                                    <button class=class="reply-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"" type="submit">Reply</button>
+                                </form>
+
+                                <!-- Display Replies -->
+                                <div class="comment-replies">
+                                    <% comment.replies.forEach(reply => { %>
+                                        <p><strong><%= reply.author %>:</strong> <%= reply.text %></p>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
+</body>
+</html>
